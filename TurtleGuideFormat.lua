@@ -248,12 +248,16 @@ end
 
 -- Register a guide
 function addon:RegisterGuide(guideString)
+    self:Debug("RegisterGuide called")
+    
     local guide = self:ParseGuide(guideString)
     
     if not guide.name or guide.name == "" then
         self:Debug("Guide has no name, skipping registration")
         return
     end
+    
+    self:Debug("Registering guide: " .. guide.name)
     
     -- Generate key if not provided
     if not guide.key or guide.key == "" then

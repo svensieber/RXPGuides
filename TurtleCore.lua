@@ -22,6 +22,7 @@ addon.settings = {
     debug = false  -- Temporary until settings system initializes
 }
 addon.guides = {}
+addon.guideGroups = {}
 
 -- Global reference already set above
 

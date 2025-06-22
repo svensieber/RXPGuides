@@ -120,9 +120,15 @@ function addon:SetupAllCommands()
     self:RegisterCommand("test3", function(self, args)
         self:Print("Testing Phase 3 - Guide System...")
         
+        -- Debug: Check if guides table exists
+        if not self.guides then
+            self:Print("ERROR: self.guides is nil!")
+            self.guides = {}
+        end
+        
         -- Test guide registration
         local testGuideCount = 0
-        for key, guide in pairs(self.guides or {}) do
+        for key, guide in pairs(self.guides) do
             testGuideCount = testGuideCount + 1
             self:Print("Found guide: " .. guide.name .. " (" .. key .. ")")
         end

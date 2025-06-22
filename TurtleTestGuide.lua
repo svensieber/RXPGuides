@@ -5,9 +5,15 @@ local addon = RXPGuides or {}
 local frame = CreateFrame("Frame")
 frame:RegisterEvent("PLAYER_LOGIN")
 frame:SetScript("OnEvent", function()
+    -- Debug output
+    DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99RXP|r: TurtleTestGuide.lua loading...")
+    
     if not addon.RegisterGuide then
+        DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99RXP|r: ERROR - RegisterGuide not found!")
         return
     end
+    
+    DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99RXP|r: Registering test guides...")
     
     -- Human Starting Zone Test Guide
     addon:RegisterGuide([[
@@ -94,5 +100,6 @@ step
 .turnin 364 >> Turn in The Mindless Ones
 ]])
 
+    DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99RXP|r: Test guides registered successfully!")
     addon:Print("Test guides loaded. Use /rxp guide to see them.")
 end)
