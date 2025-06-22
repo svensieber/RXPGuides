@@ -3,6 +3,9 @@ local addonName, addon = ...
 -- Turtle WoW Core für RXPGuides
 -- Lua 5.0 kompatibel, WoW 1.12.1 API
 
+-- Debug print to verify file is loading
+DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99RXP|r: TurtleCore.lua loading...")
+
 -- Skip if main addon already loaded (shouldn't happen on Turtle)
 if addon.loaded then return end
 
@@ -13,6 +16,9 @@ addon.version = "1.0.0-turtle"
 -- Basis Setup
 addon.settings = {}
 addon.guides = {}
+
+-- Global reference for slash commands
+_G.RXPGuides = addon
 
 -- Print function
 function addon:Print(msg, ...)
@@ -76,6 +82,9 @@ function addon:Initialize()
     self:Print("Turtle WoW Version " .. self.version .. " loaded")
     self:Debug("Debug mode " .. (self.settings.debug and "ON" or "OFF"))
     
+    -- Setup slash commands during initialization
+    self:SetupSlashCommands()
+    
     addon.loaded = true
 end
 
@@ -107,9 +116,6 @@ function addon:OnPlayerLogin()
     else
         self:Print("pfQuest not found - Navigation limited")
     end
-    
-    -- Setup slash commands
-    self:SetupSlashCommands()
 end
 
 -- Slash Commands
@@ -118,23 +124,23 @@ function addon:SetupSlashCommands()
     SLASH_RXPGUIDES2 = "/rxpguides"
     
     SlashCmdList["RXPGUIDES"] = function(msg)
-        local cmd, arg = self:ParseCommand(msg)
+        local cmd, arg = addon:ParseCommand(msg)
         
         if cmd == "test" then
-            self:Print("Test successful! Version: " .. self.version)
-            self:Debug("Debug mode is " .. (self.settings.debug and "ON" or "OFF"))
+            addon:Print("Test successful! Version: " .. addon.version)
+            addon:Debug("Debug mode is " .. (addon.settings.debug and "ON" or "OFF"))
         elseif cmd == "debug" then
-            self.settings.debug = not self.settings.debug
-            self:Print("Debug mode: " .. (self.settings.debug and "ON" or "OFF"))
+            addon.settings.debug = not addon.settings.debug
+            addon:Print("Debug mode: " .. (addon.settings.debug and "ON" or "OFF"))
         elseif cmd == "version" then
-            self:Print("Version: " .. self.version)
+            addon:Print("Version: " .. addon.version)
             local version, build, date, tocversion = GetBuildInfo()
-            self:Print("Interface: " .. tocversion)
-            self:Print("Lua 5.0 compatible")
+            addon:Print("Interface: " .. tocversion)
+            addon:Print("Lua 5.0 compatible")
         elseif cmd == "help" or cmd == "" then
-            self:ShowHelp()
+            addon:ShowHelp()
         else
-            self:Print("Unknown command: " .. cmd)
+            addon:Print("Unknown command: " .. cmd)
         end
     end
 end
@@ -161,7 +167,8 @@ end
 
 -- Events registrieren
 addon:RegisterEvent("ADDON_LOADED", function(self, event, addonName)
-    if addonName == "RXPGuides" then
+    -- In Vanilla/Turtle WoW ist addonName in arg1
+    if arg1 == "RXPGuides" then
         self:Initialize()
     end
 end)
