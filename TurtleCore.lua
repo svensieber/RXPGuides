@@ -10,6 +10,16 @@ RXPGuides = addon
 -- Debug print to verify file is loading
 DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99RXP|r: TurtleCore.lua loading...")
 
+-- Fix string.match early to prevent Pawn errors
+if not string.match or not pcall(string.match, "test", "test") then
+    string.match = function(s, pattern)
+        if not s then return nil end
+        if not pattern then return nil end
+        local _, _, capture = string.find(s, pattern)
+        return capture
+    end
+end
+
 -- Error handler to catch issues
 local function SafeCall(func, ...)
     local success, result = pcall(func, unpack(arg))

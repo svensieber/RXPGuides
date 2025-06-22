@@ -1,5 +1,10 @@
 -- In Lua 5.0 müssen wir die globale Variable nutzen
-local addon = RXPGuides or {}
+-- Aber RXPGuides existiert noch nicht, wenn diese Datei zuerst lädt
+local addon = RXPGuides
+if not addon then
+    -- Temporäre Tabelle, wird später durch die echte ersetzt
+    addon = {}
+end
 
 -- Utility Funktionen für Turtle WoW / Lua 5.0
 
@@ -10,16 +15,7 @@ function strtrim(str)
     return string.gsub(str, "^%s*(.-)%s*$", "%1")
 end
 
--- Protect against Pawn compatibility issues
-if not string.match or not pcall(string.match, "test", "test") then
-    -- Override with safer implementation that handles nil
-    string.match = function(s, pattern)
-        if not s then return nil end
-        if not pattern then return nil end
-        local _, _, capture = string.find(s, pattern)
-        return capture
-    end
-end
+-- string.match fix is now in TurtleCore.lua
 
 -- Lua 5.0 hat kein table.wipe
 function addon.wipe(t)
