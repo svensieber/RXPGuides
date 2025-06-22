@@ -3,6 +3,12 @@ local addon = RXPGuides or {}
 
 -- Utility Funktionen für Turtle WoW / Lua 5.0
 
+-- String trim function (not available in Vanilla) - define early as it's needed by other modules
+function strtrim(str)
+    if not str then return "" end
+    -- Remove leading and trailing whitespace
+    return string.gsub(str, "^%s*(.-)%s*$", "%1")
+end
 
 -- Lua 5.0 hat kein table.wipe
 function addon.wipe(t)
@@ -206,3 +212,6 @@ function addon:HexToRGB(hex)
     local b = tonumber(string.sub(hex, 5, 6), 16) / 255
     return r, g, b
 end
+
+-- Also add to addon namespace
+addon.strtrim = strtrim
