@@ -12,5 +12,8 @@
 # Turtle WoW Core Files
 TurtleCore.lua
 TurtleUtils.lua
+TurtleMessages.lua
+TurtleSettings.lua
+TurtleDB.lua
 
 # Additional files will be added as we port them

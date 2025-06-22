@@ -146,6 +146,25 @@ function addon:SetupSlashCommands()
             addon:Print("Lua 5.0 compatible")
         elseif cmd == "help" or cmd == "" then
             addon:ShowHelp()
+        elseif cmd == "test2" then
+            -- Test Phase 2 systems
+            addon:Print("Testing Phase 2 systems...")
+            
+            -- Test settings
+            addon:SetSetting("profile.debug", true)
+            addon:Print("Debug setting: " .. tostring(addon:GetSetting("profile.debug")))
+            
+            -- Test messages
+            addon:RegisterMessage("TEST_MESSAGE", function(self, msg, data)
+                self:Print("Received message: " .. msg .. " with data: " .. (data or "none"))
+            end)
+            addon:SendMessage("TEST_MESSAGE", "test data")
+            
+            -- Test database
+            addon:SetDBValue("profile", "testKey", "testValue")
+            addon:Print("DB test value: " .. (addon:GetDBValue("profile", "testKey") or "nil"))
+            
+            addon:Print("Phase 2 test complete!")
         else
             addon:Print("Unknown command: " .. cmd)
         end
@@ -167,8 +186,14 @@ end
 function addon:ShowHelp()
     self:Print("Available commands:")
     self:Print("/rxp test - Test installation")
+    self:Print("/rxp test2 - Test Phase 2 systems")
     self:Print("/rxp debug - Toggle debug mode")
     self:Print("/rxp version - Show version info")
+    self:Print("/rxp enable/disable - Enable/disable addon")
+    self:Print("/rxp scale <0.5-2.0> - Set window scale")
+    self:Print("/rxp reset [settings|positions] - Reset settings or positions")
+    self:Print("/rxp resetdb [global|profile|char|all] - Reset database")
+    self:Print("/rxp db - Show database info")
     self:Print("/rxp help - Show this help")
 end
 
