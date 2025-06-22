@@ -1,5 +1,111 @@
 -- Test Guide for Turtle WoW
-local addon = RXPGuides or {}
+local addon = RXPGuides
+if not addon then
+    DEFAULT_CHAT_FRAME:AddMessage("ERROR: RXPGuides not found in TurtleTestGuide.lua!")
+    return
+end
+
+-- Function to register test guides
+function addon:RegisterTestGuides()
+    self:Print("Registering test guides...")
+    
+    local count = self:CountTableEntries(self.guides)
+    self:Print("Guides before registration: " .. count)
+    
+    -- Human Starting Zone Test Guide
+    local humanGuide = self:RegisterGuide([[
+#version 1
+#group Test Guides
+#subgroup Turtle WoW
+#name Human 1-6 Test
+#next human-6-10-test
+#level 1-6
+#turtle
+<< Alliance
+
+step
+>>Talk to |cRXP_FRIENDLY_Deputy Willem|r
+.target Deputy Willem
+.goto Elwynn Forest,48.17,42.94
+.accept 783 >> Accept A Threat Within
+
+step
+>>Kill |cRXP_ENEMY_Young Wolves|r
+.goto Elwynn Forest,48.5,40.0,40,0
+.goto Elwynn Forest,47.0,39.0,40,0
+.complete 783,1
+.mob Young Wolf
+
+step
+>>Talk to |cRXP_FRIENDLY_Deputy Willem|r
+.target Deputy Willem  
+.goto Elwynn Forest,48.17,42.94
+.turnin 783 >> Turn in A Threat Within
+.accept 7 >> Accept Kobold Camp Cleanup
+
+step
+>>Kill |cRXP_ENEMY_Kobold Vermin|r
+.goto Elwynn Forest,47.6,35.8,40,0
+.goto Elwynn Forest,49.5,35.5,40,0
+.complete 7,1
+.mob Kobold Vermin
+
+step
+>>Talk to |cRXP_FRIENDLY_Deputy Willem|r
+.target Deputy Willem
+.goto Elwynn Forest,48.17,42.94
+.turnin 7 >> Turn in Kobold Camp Cleanup
+]])
+
+    -- Undead Starting Zone Test Guide  
+    local undeadGuide = self:RegisterGuide([[
+#version 1
+#group Test Guides
+#subgroup Turtle WoW
+#name Undead 1-6 Test
+#next undead-6-10-test
+#level 1-6
+#turtle
+<< Horde
+
+step
+>>Talk to |cRXP_FRIENDLY_Undertaker Mordo|r
+.target Undertaker Mordo
+.goto Tirisfal Glades,30.22,71.65
+.accept 363 >> Accept Rude Awakening
+
+step
+>>Talk to |cRXP_FRIENDLY_Shadow Priest Sarvis|r
+.target Shadow Priest Sarvis
+.goto Tirisfal Glades,30.84,66.20
+.turnin 363 >> Turn in Rude Awakening
+.accept 364 >> Accept The Mindless Ones
+
+step
+>>Kill |cRXP_ENEMY_Mindless Zombies|r and |cRXP_ENEMY_Wretched Zombies|r
+.goto Tirisfal Glades,32.4,63.2,40,0
+.goto Tirisfal Glades,31.0,64.8,40,0
+.complete 364,1
+.complete 364,2
+.mob Mindless Zombie
+.mob Wretched Zombie
+
+step
+>>Talk to |cRXP_FRIENDLY_Shadow Priest Sarvis|r
+.target Shadow Priest Sarvis
+.goto Tirisfal Glades,30.84,66.20
+.turnin 364 >> Turn in The Mindless Ones
+]])
+
+    count = self:CountTableEntries(self.guides)
+    self:Print("Guides after registration: " .. count)
+    
+    -- List all registered guides
+    self:Print("Registered guides:")
+    for key, guide in pairs(self.guides) do
+        self:Print("- " .. key .. ": " .. (guide.name or "unnamed"))
+    end
+end
 
 -- Register test guide after addon loads
 local frame = CreateFrame("Frame")

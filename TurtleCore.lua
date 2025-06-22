@@ -11,10 +11,14 @@ RXPGuides = addon
 DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99RXP|r: TurtleCore.lua loading...")
 
 -- Fix string.match early to prevent Pawn errors
-if not string.match or not pcall(string.match, "test", "test") then
-    string.match = function(s, pattern)
-        if not s then return nil end
-        if not pattern then return nil end
+-- Force override even if it exists, to ensure nil safety
+local original_match = string.match
+string.match = function(s, pattern)
+    if not s then return nil end
+    if not pattern then return nil end
+    if original_match and type(s) == "string" then
+        return original_match(s, pattern)
+    else
         local _, _, capture = string.find(s, pattern)
         return capture
     end

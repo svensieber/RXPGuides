@@ -1,7 +1,11 @@
 -- Final initialization for Turtle WoW
 -- This file ensures everything is loaded in the correct order
 
-local addon = RXPGuides or {}
+local addon = RXPGuides
+if not addon then
+    DEFAULT_CHAT_FRAME:AddMessage("ERROR: RXPGuides not found in TurtleFinalInit.lua!")
+    return
+end
 
 -- Final initialization after all files are loaded
 local frame = CreateFrame("Frame")
@@ -28,6 +32,7 @@ frame:SetScript("OnEvent", function()
     
     addon:Print("System check:")
     addon:Print("- guides table exists: " .. tostring(addon.guides ~= nil))
+    addon:Print("- Number of guides: " .. addon:CountTableEntries(addon.guides))
     
     local allLoaded = true
     for i = 1, table.getn(systems) do

@@ -80,18 +80,28 @@ step
 .goto Test,50,50
 ]]
             self:Print("Attempting to register test guide...")
-            local success, err = pcall(function()
-                self:RegisterGuide(testGuide)
+            local success, result = pcall(function()
+                return self:RegisterGuide(testGuide)
             end)
             
             if success then
-                self:Print("Registration successful!")
+                self:Print("Registration call successful!")
+                self:Print("RegisterGuide returned: " .. tostring(result))
+                
                 -- Count guides
                 local count = 0
                 for k, v in pairs(self.guides or {}) do
                     count = count + 1
+                    self:Print("- Found guide key: " .. k)
                 end
                 self:Print("Total guides now: " .. count)
+                
+                -- Also check with different methods
+                local directCount = 0
+                for k in pairs(addon.guides or {}) do
+                    directCount = directCount + 1
+                end
+                self:Print("Direct count of addon.guides: " .. directCount)
             else
                 self:Print("Registration failed: " .. tostring(err))
             end
@@ -213,6 +223,15 @@ step
         
         self:Print("Phase 3 test complete!")
     end, "Test Phase 3 guide system")
+    
+    -- Command to manually register test guides
+    self:RegisterCommand("loadguides", function(self, args)
+        if self.RegisterTestGuides then
+            self:RegisterTestGuides()
+        else
+            self:Print("RegisterTestGuides function not found!")
+        end
+    end, "Load test guides")
 end
 
 -- Main command handler

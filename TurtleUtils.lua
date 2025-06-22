@@ -222,3 +222,30 @@ end
 
 -- Also add to addon namespace
 addon.strtrim = strtrim
+
+-- Helper to split strings by delimiter
+function addon:SplitString(str, delimiter)
+    delimiter = delimiter or "\n"
+    local result = {}
+    local from = 1
+    local delim_from, delim_to = string.find(str, delimiter, from)
+    
+    while delim_from do
+        tinsert(result, string.sub(str, from, delim_from - 1))
+        from = delim_to + 1
+        delim_from, delim_to = string.find(str, delimiter, from)
+    end
+    
+    tinsert(result, string.sub(str, from))
+    return result
+end
+
+-- Helper to count table entries
+function addon:CountTableEntries(t)
+    if not t then return 0 end
+    local count = 0
+    for _ in pairs(t) do
+        count = count + 1
+    end
+    return count
+end

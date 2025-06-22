@@ -1,5 +1,9 @@
 -- Guide Format and Parser for Turtle WoW
-local addon = RXPGuides or {}
+local addon = RXPGuides
+if not addon then
+    DEFAULT_CHAT_FRAME:AddMessage("ERROR: RXPGuides not found in TurtleGuideFormat.lua!")
+    return
+end
 
 -- Guide metadata structure
 addon.guideMetaTags = {
@@ -270,8 +274,25 @@ function addon:RegisterGuide(guideString)
         self.guides = {}
     end
     
+    -- Debug: Check what 'self' actually is
+    self:Print("Debug: type(self) = " .. type(self))
+    self:Print("Debug: self == RXPGuides? " .. tostring(self == RXPGuides))
+    self:Print("Debug: self == addon? " .. tostring(self == addon))
+    
+    self:Print("Before storing: " .. self:CountTableEntries(self.guides) .. " guides")
+    self:Print("Storing guide with key: " .. guide.key)
+    
+    -- Try both self.guides and addon.guides
     self.guides[guide.key] = guide
-    self:Print("Guide stored with key: " .. guide.key)
+    addon.guides[guide.key] = guide
+    RXPGuides.guides[guide.key] = guide
+    
+    self:Print("After storing in self.guides: " .. self:CountTableEntries(self.guides) .. " guides")
+    self:Print("After storing in addon.guides: " .. self:CountTableEntries(addon.guides) .. " guides")
+    self:Print("After storing in RXPGuides.guides: " .. self:CountTableEntries(RXPGuides.guides) .. " guides")
+    self:Print("Verification - guide exists in self.guides: " .. tostring(self.guides[guide.key] ~= nil))
+    self:Print("Verification - guide exists in addon.guides: " .. tostring(addon.guides[guide.key] ~= nil))
+    self:Print("Verification - guide exists in RXPGuides.guides: " .. tostring(RXPGuides.guides[guide.key] ~= nil))
     
     -- Group organization
     if not self.guideGroups then
