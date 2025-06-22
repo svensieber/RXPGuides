@@ -139,8 +139,10 @@ function addon:SetupSlashCommands()
             addon:Print("Debug mode: " .. (addon.settings.debug and "ON" or "OFF"))
         elseif cmd == "version" then
             addon:Print("Version: " .. addon.version)
-            local version, build, date, tocversion = GetBuildInfo()
-            addon:Print("Interface: " .. tocversion)
+            -- In Vanilla gibt GetBuildInfo nur 3 Werte zurück
+            local version, build, date = GetBuildInfo()
+            addon:Print("WoW Version: " .. version .. " (Build " .. build .. ")")
+            addon:Print("Interface: 11200 (Turtle WoW)")
             addon:Print("Lua 5.0 compatible")
         elseif cmd == "help" or cmd == "" then
             addon:ShowHelp()
