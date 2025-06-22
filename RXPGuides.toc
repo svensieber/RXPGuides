@@ -27,7 +27,4 @@ TurtleTestGuide.lua
 # Final initialization
 TurtleFinalInit.lua
 
-# Debug/Test
-TurtleManualGuideTest.lua
-
 # Additional files will be added as we port them

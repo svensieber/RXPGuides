@@ -60,6 +60,46 @@ function addon:SetupAllCommands()
         self:ShowHelp()
     end, "Show this help")
     
+    -- Manual test command
+    self:RegisterCommand("manualtest", function(self, args)
+        self:Print("Manual Guide Test...")
+        
+        -- Check functions
+        self:Print("Functions available:")
+        self:Print("- RegisterGuide: " .. tostring(self.RegisterGuide ~= nil))
+        self:Print("- ParseGuide: " .. tostring(self.ParseGuide ~= nil))
+        self:Print("- guides table: " .. tostring(self.guides ~= nil))
+        
+        if self.RegisterGuide then
+            -- Try to register a test guide
+            local testGuide = [[
+#version 1
+#name Manual Test Guide
+step
+>>Test step
+.goto Test,50,50
+]]
+            self:Print("Attempting to register test guide...")
+            local success, err = pcall(function()
+                self:RegisterGuide(testGuide)
+            end)
+            
+            if success then
+                self:Print("Registration successful!")
+                -- Count guides
+                local count = 0
+                for k, v in pairs(self.guides or {}) do
+                    count = count + 1
+                end
+                self:Print("Total guides now: " .. count)
+            else
+                self:Print("Registration failed: " .. tostring(err))
+            end
+        else
+            self:Print("RegisterGuide function not found!")
+        end
+    end, "Manually test guide registration")
+    
     -- Settings commands
     self:RegisterCommand("settings", function(self, args)
         self:Print("Settings panel not yet implemented")

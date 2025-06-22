@@ -22,15 +22,21 @@ frame:SetScript("OnEvent", function()
         {name = "Database System", check = addon.GetDBValue},
         {name = "Guide System", check = addon.ParseGuide},
         {name = "Guide Loader", check = addon.LoadGuide},
-        {name = "Command System", check = addon.HandleCommand}
+        {name = "Command System", check = addon.HandleCommand},
+        {name = "Guide Registration", check = addon.RegisterGuide}
     }
+    
+    addon:Print("System check:")
+    addon:Print("- guides table exists: " .. tostring(addon.guides ~= nil))
     
     local allLoaded = true
     for i = 1, table.getn(systems) do
         local system = systems[i]
         if not system.check then
-            addon:Debug("System not loaded: " .. system.name)
+            addon:Print("System NOT loaded: " .. system.name)
             allLoaded = false
+        else
+            addon:Debug("System loaded: " .. system.name)
         end
     end
     
