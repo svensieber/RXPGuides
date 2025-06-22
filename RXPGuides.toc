@@ -15,11 +15,16 @@ TurtleUtils.lua
 TurtleMessages.lua
 TurtleSettings.lua
 TurtleDB.lua
-TurtleCommands.lua
 
 # Phase 3 - Guide System
 TurtleGuideFormat.lua
 TurtleGuideLoader.lua
+
+# Commands must be loaded after all systems
+TurtleCommands.lua
 TurtleTestGuide.lua
+
+# Final initialization
+TurtleFinalInit.lua
 
 # Additional files will be added as we port them

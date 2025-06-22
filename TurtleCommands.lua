@@ -137,13 +137,18 @@ step
 .goto Test Zone,50,50
 .accept 123
 ]]
-        local parsed = self:ParseGuide(simpleGuide)
-        if parsed then
-            self:Print("Guide parsing: OK")
-            self:Print("- Name: " .. (parsed.name or "none"))
-            self:Print("- Steps: " .. table.getn(parsed.steps or {}))
+        -- Check if ParseGuide is available
+        if self.ParseGuide then
+            local parsed = self:ParseGuide(simpleGuide)
+            if parsed then
+                self:Print("Guide parsing: OK")
+                self:Print("- Name: " .. (parsed.name or "none"))
+                self:Print("- Steps: " .. table.getn(parsed.steps or {}))
+            else
+                self:Print("Guide parsing: FAILED")
+            end
         else
-            self:Print("Guide parsing: FAILED")
+            self:Print("ParseGuide function not available yet")
         end
         
         self:Print("Phase 3 test complete!")

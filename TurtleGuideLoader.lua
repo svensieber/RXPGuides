@@ -303,10 +303,5 @@ addon.Initialize = function(self)
     -- Register guide commands
     self:RegisterGuideCommands()
     
-    -- Setup commands must be called after all commands are registered
-    if self.SetupAllCommands then
-        self:SetupAllCommands()
-    end
-    
     self:Debug("Guide loader initialized")
 end
