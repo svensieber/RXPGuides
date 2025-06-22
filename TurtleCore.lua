@@ -92,6 +92,14 @@ function addon:Initialize()
     -- Setup slash commands during initialization
     self:SetupSlashCommands()
     
+    -- Delay command setup until all files are loaded
+    self:ScheduleTimer(function()
+        if self.SetupAllCommands then
+            self:SetupAllCommands()
+            self:Debug("Commands setup complete")
+        end
+    end, 0.1)
+    
     addon.loaded = true
 end
 
@@ -130,12 +138,21 @@ function addon:SetupSlashCommands()
     SLASH_RXPGUIDES1 = "/rxp"
     SLASH_RXPGUIDES2 = "/rxpguides"
     
-    -- Setup all command handlers
-    self:SetupAllCommands()
-    
-    -- Main handler
+    -- Main handler - will use HandleCommand once it's available
     SlashCmdList["RXPGUIDES"] = function(msg)
-        addon:HandleCommand(msg)
+        if addon.HandleCommand then
+            addon:HandleCommand(msg)
+        else
+            -- Fallback for basic commands before full system loads
+            local cmd = addon:ParseCommand(msg)
+            if cmd == "test" then
+                addon:Print("Test successful! Version: " .. addon.version)
+            elseif cmd == "version" then
+                addon:Print("Version: " .. addon.version)
+            else
+                addon:Print("System still loading, try again in a moment...")
+            end
+        end
     end
 end
 

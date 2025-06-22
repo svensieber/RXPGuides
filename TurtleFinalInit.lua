@@ -7,11 +7,13 @@ local addon = RXPGuides or {}
 local frame = CreateFrame("Frame")
 frame:RegisterEvent("PLAYER_LOGIN")
 frame:SetScript("OnEvent", function()
-    -- Ensure all commands are properly registered
-    if addon.SetupAllCommands then
-        addon:SetupAllCommands()
-        addon:Debug("All commands registered")
-    end
+    -- Small delay to ensure everything is loaded
+    addon:ScheduleTimer(function()
+        -- Ensure all commands are properly registered
+        if addon.SetupAllCommands then
+            addon:SetupAllCommands()
+            addon:Debug("All commands registered")
+        end
     
     -- Verify all systems are loaded
     local systems = {
@@ -50,4 +52,5 @@ frame:SetScript("OnEvent", function()
             end, 1)
         end
     end
+    end, 0.5)  -- End of timer
 end)
