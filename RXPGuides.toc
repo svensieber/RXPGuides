@@ -1,36 +1,37 @@
-## Interface: 110005, 40402, 50500, 11507
-## Interface-Mists: 50500
-## Interface-Cata: 40402
-## Interface-Vanilla: 11507
+## Interface: 11200
 ## Title: RestedXP Guides
 ## Notes: In-game leveling guides
 ## Author: RestedXP
-## Version: @project-version@
+## Version: 1.0.0-turtle
 ## OptionalDeps: Questie, RXPGuides_Themes
 ## SavedVariables: RXPData, RXPDB, RXPSettings
 ## SavedVariablesPerCharacter: RXPCData, RXPCTrackingData, RXPCComms, RXPCSettings
 ## X-Curse-Project-ID: 486246
 ## X-Wago-ID: ZKbebq61
 
+# Turtle WoW Detection and Loading
+TurtleDetect.lua
+
+# Turtle WoW Compatibility Files
+TurtleCore.lua
+TurtleUtils.lua
+TurtleLocale.lua
 libs\embeds_Mainline.xml [AllowLoadGameType mainline]
 libs\embeds.xml [AllowLoadGameType classic]
 locale\locales.xml
 UI\includes.xml [AllowLoadGameType classic]
-
 Locale.lua
 Themes.lua
 RXPGuides.lua
 GuideWindow.lua
 Help.lua
 SettingsPanel.lua
-
 DB/mainline.xml [AllowLoadGameType mainline]
 DB/mop.xml [AllowLoadGameType mists]
 DB/cata.xml [AllowLoadGameType cata]
 DB/wotlk.xml [AllowLoadGameType wrath]
 DB/tbc.xml [AllowLoadGameType tbc]
 DB/classic.xml [AllowLoadGameType vanilla]
-
 HSBatching.lua
 QuestLog.lua
 ActiveItemFrame.lua
@@ -40,21 +41,15 @@ Communications.lua
 Targeting.lua
 Tips.lua
 InventoryManager.lua
-
-
 map.lua
 functions.lua
 GuideLoader.lua
 HardcoreIntroUI.lua [AllowLoadGameType vanilla]
-
 Guides/GuideList-Mainline.xml [AllowLoadGameType mainline]
 Guides/GuideList-cata.xml [AllowLoadGameType cata,mists]
 Guides/GuideList-classic.xml [AllowLoadGameType vanilla]
-
 Talents.lua [AllowLoadGameType cata,vanilla]
 Guides/Talents/cata.xml [AllowLoadGameType cata]
 Guides/Talents/classic.xml [AllowLoadGameType vanilla]
-
 ItemUpgrades.lua [AllowLoadGameType cata,vanilla]
-
 CptStadicsVendorTreasures.lua [AllowLoadGameType vanilla]

@@ -4,6 +4,9 @@ local _G = _G
 local UnitInRaid = UnitInRaid
 local fmt = string.format
 
+-- Skip initialization on Turtle WoW - use TurtleCore instead
+if addon.isTurtleWoW then return end
+
 addon = LibStub("AceAddon-3.0"):NewAddon(addon, addonName, "AceEvent-3.0")
 
 local RegisterMessage_OLD = addon.RegisterMessage
