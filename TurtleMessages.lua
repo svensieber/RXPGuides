@@ -119,12 +119,23 @@ function addon:NewModule(name)
         parent = self
     }
     
-    -- Copy core functions
-    module.RegisterEvent = function(m, ...) self.RegisterEvent(self, ...) end
-    module.RegisterMessage = function(m, ...) self.RegisterMessage(self, ...) end
-    module.SendMessage = function(m, ...) self.SendMessage(self, ...) end
-    module.Print = function(m, ...) self.Print(self, ...) end
-    module.Debug = function(m, ...) self.Debug(self, ...) end
+    -- Copy core functions (Lua 5.0 compatible)
+    module.RegisterEvent = function(m, event, callback) 
+        self.RegisterEvent(self, event, callback) 
+    end
+    module.RegisterMessage = function(m, message, callback) 
+        self.RegisterMessage(self, message, callback) 
+    end
+    module.SendMessage = function(m, message) 
+        -- Pass through arg table
+        self.SendMessage(self, message, arg and unpack(arg))
+    end
+    module.Print = function(m, msg) 
+        self.Print(self, msg, arg and unpack(arg))
+    end
+    module.Debug = function(m, msg) 
+        self.Debug(self, msg, arg and unpack(arg))
+    end
     
     self.modules[name] = module
     return module

@@ -171,7 +171,8 @@ function addon:RegisterSettingsCommands()
         local cmd, arg = addon:ParseCommand(msg)
         
         if cmd == "settings" or cmd == "config" then
-            addon:ShowSettingsPanel()
+            -- TODO: Implement settings panel in Phase 8
+            addon:Print("Settings panel not yet implemented")
         elseif cmd == "reset" then
             if arg == "settings" then
                 addon:ResetSettings()
