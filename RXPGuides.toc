@@ -17,4 +17,9 @@ TurtleSettings.lua
 TurtleDB.lua
 TurtleCommands.lua
 
+# Phase 3 - Guide System
+TurtleGuideFormat.lua
+TurtleGuideLoader.lua
+TurtleTestGuide.lua
+
 # Additional files will be added as we port them

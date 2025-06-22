@@ -115,6 +115,39 @@ function addon:SetupAllCommands()
         self:Disable()
         self:Print("Addon disabled")
     end, "Disable addon")
+    
+    -- Phase 3 test command
+    self:RegisterCommand("test3", function(self, args)
+        self:Print("Testing Phase 3 - Guide System...")
+        
+        -- Test guide registration
+        local testGuideCount = 0
+        for key, guide in pairs(self.guides or {}) do
+            testGuideCount = testGuideCount + 1
+            self:Print("Found guide: " .. guide.name .. " (" .. key .. ")")
+        end
+        self:Print("Total guides registered: " .. testGuideCount)
+        
+        -- Test guide parsing
+        local simpleGuide = [[
+#version 1
+#name Simple Test
+step
+>>Talk to Test NPC
+.goto Test Zone,50,50
+.accept 123
+]]
+        local parsed = self:ParseGuide(simpleGuide)
+        if parsed then
+            self:Print("Guide parsing: OK")
+            self:Print("- Name: " .. (parsed.name or "none"))
+            self:Print("- Steps: " .. table.getn(parsed.steps or {}))
+        else
+            self:Print("Guide parsing: FAILED")
+        end
+        
+        self:Print("Phase 3 test complete!")
+    end, "Test Phase 3 guide system")
 end
 
 -- Main command handler
