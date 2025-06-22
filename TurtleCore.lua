@@ -1,7 +1,8 @@
 -- In Lua 5.0 müssen wir globale Variablen verwenden
 local addonName = "RXPGuides"
 local addon = {}
-_G[addonName] = addon
+-- Direkt als globale Variable setzen
+RXPGuides = addon
 
 -- Turtle WoW Core für RXPGuides
 -- Lua 5.0 kompatibel, WoW 1.12.1 API
@@ -20,8 +21,7 @@ addon.version = "1.0.0-turtle"
 addon.settings = {}
 addon.guides = {}
 
--- Global reference for slash commands
-_G.RXPGuides = addon
+-- Global reference already set above
 
 -- Print function
 function addon:Print(msg)
