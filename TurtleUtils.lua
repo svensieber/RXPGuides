@@ -2,8 +2,6 @@ local _, addon = ...
 
 -- Utility Funktionen für Turtle WoW / Lua 5.0
 
--- Nur auf Turtle WoW ausführen
-if not addon.isTurtleWoW then return end
 
 -- Lua 5.0 hat kein table.wipe
 function addon.wipe(t)

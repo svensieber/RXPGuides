@@ -3,18 +3,18 @@ local addonName, addon = ...
 -- Turtle WoW Core für RXPGuides
 -- Lua 5.0 kompatibel, WoW 1.12.1 API
 
--- Nur auf Turtle WoW ausführen
-if not addon.isTurtleWoW then return end
+-- Skip if main addon already loaded (shouldn't happen on Turtle)
+if addon.loaded then return end
 
 addon.isTurtle = true
 addon.gameVersion = 11200
+addon.version = "1.0.0-turtle"
 
 -- Basis Setup
-addon.version = "1.0.0-turtle"
 addon.settings = {}
 addon.guides = {}
 
--- Lua 5.0 Utilities
+-- Print function
 function addon:Print(msg, ...)
     if arg and table.getn(arg) > 0 then
         msg = string.format(msg, unpack(arg))
@@ -30,7 +30,7 @@ function addon:Debug(msg, ...)
     DEFAULT_CHAT_FRAME:AddMessage("|cffff9933RXP Debug|r: " .. msg)
 end
 
--- Event System (Ace3 Ersatz für Turtle)
+-- Event System
 local frame = CreateFrame("Frame", "RXPGuidesFrame")
 addon.frame = frame
 addon.events = {}
@@ -73,10 +73,10 @@ function addon:Initialize()
     -- Standard-Einstellungen
     self:LoadDefaults()
     
-    self:Print(self:Localize("Turtle WoW Version") .. " " .. self.version .. " " .. self:Localize("Loaded"))
+    self:Print("Turtle WoW Version " .. self.version .. " loaded")
+    self:Debug("Debug mode " .. (self.settings.debug and "ON" or "OFF"))
     
-    -- Test-Befehl
-    self:SetupSlashCommands()
+    addon.loaded = true
 end
 
 function addon:LoadDefaults()
@@ -100,24 +100,16 @@ end
 function addon:OnPlayerLogin()
     self:Debug("Player login detected")
     
-    -- Weitere Initialisierung hier
-    self:CheckTurtleWoWCompat()
-end
-
-function addon:CheckTurtleWoWCompat()
-    -- Prüfe ob wir wirklich auf Turtle WoW sind
-    local realmName = GetRealmName()
-    if realmName and string.find(string.lower(realmName), "turtle") then
-        self:Debug(self:Localize("Turtle WoW server detected"))
-    end
-    
-    -- Prüfe auf pfQuest
+    -- Check for pfQuest
     if pfQuest then
-        self:Print(self:Localize("pfQuest found - Navigation enabled"))
+        self:Print("pfQuest found - Navigation enabled")
         self.pfQuestAvailable = true
     else
-        self:Print(self:Localize("pfQuest not found - Navigation limited"))
+        self:Print("pfQuest not found - Navigation limited")
     end
+    
+    -- Setup slash commands
+    self:SetupSlashCommands()
 end
 
 -- Slash Commands
@@ -129,19 +121,20 @@ function addon:SetupSlashCommands()
         local cmd, arg = self:ParseCommand(msg)
         
         if cmd == "test" then
-            self:Print(self:Localize("Test successful") .. "! " .. self:Localize("Version") .. ": " .. self.version)
-            self:Debug(self:Localize("Debug Mode") .. " " .. (self.settings.debug and self:Localize("ON") or self:Localize("OFF")))
+            self:Print("Test successful! Version: " .. self.version)
+            self:Debug("Debug mode is " .. (self.settings.debug and "ON" or "OFF"))
         elseif cmd == "debug" then
             self.settings.debug = not self.settings.debug
-            self:Print(self:Localize("Debug Mode") .. ": " .. (self.settings.debug and self:Localize("ON") or self:Localize("OFF")))
+            self:Print("Debug mode: " .. (self.settings.debug and "ON" or "OFF"))
         elseif cmd == "version" then
-            self:Print(self:Localize("Version") .. ": " .. self.version)
-            self:Print("Interface: " .. select(4, GetBuildInfo()))
-            self:Print("Lua 5.0 kompatibel")
+            self:Print("Version: " .. self.version)
+            local version, build, date, tocversion = GetBuildInfo()
+            self:Print("Interface: " .. tocversion)
+            self:Print("Lua 5.0 compatible")
         elseif cmd == "help" or cmd == "" then
             self:ShowHelp()
         else
-            self:Print(self:Localize("Unknown command") .. ": " .. cmd)
+            self:Print("Unknown command: " .. cmd)
         end
     end
 end
@@ -159,11 +152,11 @@ function addon:ParseCommand(msg)
 end
 
 function addon:ShowHelp()
-    self:Print(self:Localize("Available commands") .. ":")
-    self:Print("/rxp test - Testet die Installation")
-    self:Print("/rxp debug - Debug-Modus umschalten")
-    self:Print("/rxp version - Zeigt Version Info")
-    self:Print("/rxp help - Diese Hilfe")
+    self:Print("Available commands:")
+    self:Print("/rxp test - Test installation")
+    self:Print("/rxp debug - Toggle debug mode")
+    self:Print("/rxp version - Show version info")
+    self:Print("/rxp help - Show this help")
 end
 
 -- Events registrieren
