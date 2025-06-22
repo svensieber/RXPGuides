@@ -15,5 +15,6 @@ TurtleUtils.lua
 TurtleMessages.lua
 TurtleSettings.lua
 TurtleDB.lua
+TurtleCommands.lua
 
 # Additional files will be added as we port them

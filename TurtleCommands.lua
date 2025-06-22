@@ -1,0 +1,154 @@
+-- Centralized command handling for Turtle WoW
+local addon = RXPGuides or {}
+
+-- Command handlers table
+addon.commandHandlers = {}
+
+-- Register a command handler
+function addon:RegisterCommand(command, handler, description)
+    self.commandHandlers[command] = {
+        handler = handler,
+        description = description or "No description"
+    }
+end
+
+-- Setup all commands
+function addon:SetupAllCommands()
+    -- Core commands
+    self:RegisterCommand("test", function(self, args)
+        self:Print("Test successful! Version: " .. self.version)
+        self:Debug("Debug mode is " .. (self.settings.debug and "ON" or "OFF"))
+    end, "Test installation")
+    
+    self:RegisterCommand("test2", function(self, args)
+        self:Print("Testing Phase 2 systems...")
+        
+        -- Test settings
+        self:SetSetting("profile.debug", true)
+        self:Print("Debug setting: " .. tostring(self:GetSetting("profile.debug")))
+        
+        -- Test messages
+        self:RegisterMessage("TEST_MESSAGE", function(self, msg, data)
+            self:Print("Received message: " .. msg .. " with data: " .. (data or "none"))
+        end)
+        self:SendMessage("TEST_MESSAGE", "test data")
+        
+        -- Test database
+        self:SetDBValue("profile", "testKey", "testValue")
+        self:Print("DB test value: " .. (self:GetDBValue("profile", "testKey") or "nil"))
+        
+        self:Print("Phase 2 test complete!")
+    end, "Test Phase 2 systems")
+    
+    self:RegisterCommand("debug", function(self, args)
+        -- Toggle debug in profile settings
+        local currentDebug = self:GetSetting("profile.debug")
+        self:SetSetting("profile.debug", not currentDebug)
+        self.settings.debug = not currentDebug  -- Also update the shortcut
+        self:Print("Debug mode: " .. (self.settings.debug and "ON" or "OFF"))
+    end, "Toggle debug mode")
+    
+    self:RegisterCommand("version", function(self, args)
+        self:Print("Version: " .. self.version)
+        local version, build, date = GetBuildInfo()
+        self:Print("WoW Version: " .. version .. " (Build " .. build .. ")")
+        self:Print("Interface: 11200 (Turtle WoW)")
+        self:Print("Lua 5.0 compatible")
+    end, "Show version info")
+    
+    self:RegisterCommand("help", function(self, args)
+        self:ShowHelp()
+    end, "Show this help")
+    
+    -- Settings commands
+    self:RegisterCommand("settings", function(self, args)
+        self:Print("Settings panel not yet implemented")
+    end, "Open settings panel")
+    
+    self:RegisterCommand("config", function(self, args)
+        self:Print("Settings panel not yet implemented")
+    end, "Open settings panel")
+    
+    self:RegisterCommand("scale", function(self, args)
+        local scale = tonumber(args)
+        if scale and scale >= 0.5 and scale <= 2.0 then
+            self:SetSetting("profile.windowScale", scale)
+            self:Print("Window scale set to: " .. scale)
+        else
+            self:Print("Scale must be between 0.5 and 2.0")
+        end
+    end, "Set window scale")
+    
+    self:RegisterCommand("reset", function(self, args)
+        if args == "settings" then
+            self:ResetSettings()
+        elseif args == "positions" then
+            self:ResetPositions()
+        else
+            self:Print("Usage: /rxp reset [settings|positions]")
+        end
+    end, "Reset settings or positions")
+    
+    -- Database commands
+    self:RegisterCommand("resetdb", function(self, args)
+        if args and (args == "global" or args == "profile" or args == "char" or args == "all") then
+            self:ResetDatabase(args)
+        else
+            self:Print("Usage: /rxp resetdb [global|profile|char|all]")
+        end
+    end, "Reset database")
+    
+    self:RegisterCommand("db", function(self, args)
+        self:Print("Database info:")
+        self:Print("- Global entries: " .. self:CountTableEntries(self.db.global))
+        self:Print("- Profile entries: " .. self:CountTableEntries(self.db.profile))
+        self:Print("- Character entries: " .. self:CountTableEntries(self.db.char))
+    end, "Show database info")
+    
+    -- Enable/Disable commands
+    self:RegisterCommand("enable", function(self, args)
+        self:Enable()
+        self:Print("Addon enabled")
+    end, "Enable addon")
+    
+    self:RegisterCommand("disable", function(self, args)
+        self:Disable()
+        self:Print("Addon disabled")
+    end, "Disable addon")
+end
+
+-- Main command handler
+function addon:HandleCommand(msg)
+    local cmd, args = self:ParseCommand(msg)
+    
+    if not cmd or cmd == "" then
+        cmd = "help"
+    end
+    
+    local handler = self.commandHandlers[cmd]
+    if handler then
+        handler.handler(self, args)
+    else
+        self:Print("Unknown command: " .. cmd)
+        self:Print("Type /rxp help for available commands")
+    end
+end
+
+-- Show help
+function addon:ShowHelp()
+    self:Print("Available commands:")
+    
+    -- Sort commands alphabetically
+    local sortedCmds = {}
+    for cmd, _ in pairs(self.commandHandlers) do
+        tinsert(sortedCmds, cmd)
+    end
+    table.sort(sortedCmds)
+    
+    -- Display commands
+    for i = 1, table.getn(sortedCmds) do
+        local cmd = sortedCmds[i]
+        local info = self.commandHandlers[cmd]
+        self:Print("/rxp " .. cmd .. " - " .. info.description)
+    end
+end

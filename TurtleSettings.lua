@@ -45,6 +45,12 @@ function addon:InitializeSettings()
     -- Merge with defaults
     self.settings = self:MergeSettings(RXPSettings, self.defaultSettings)
     
+    -- Override the simple debug boolean from TurtleCore
+    if type(self.settings) == "table" and type(self.settings.profile) == "table" then
+        -- Use the profile debug setting
+        self.settings.debug = self.settings.profile.debug
+    end
+    
     -- Save back to ensure all defaults are present
     RXPSettings = self.settings
 end
@@ -162,39 +168,7 @@ function addon:RestoreFramePosition(frameName, frame)
     end
 end
 
--- Settings slash commands
-function addon:RegisterSettingsCommands()
-    -- Add settings commands to existing slash handler
-    local oldHandler = SlashCmdList["RXPGUIDES"]
-    
-    SlashCmdList["RXPGUIDES"] = function(msg)
-        local cmd, arg = addon:ParseCommand(msg)
-        
-        if cmd == "settings" or cmd == "config" then
-            -- TODO: Implement settings panel in Phase 8
-            addon:Print("Settings panel not yet implemented")
-        elseif cmd == "reset" then
-            if arg == "settings" then
-                addon:ResetSettings()
-            elseif arg == "positions" then
-                addon:ResetPositions()
-            else
-                addon:Print("Usage: /rxp reset [settings|positions]")
-            end
-        elseif cmd == "scale" and arg then
-            local scale = tonumber(arg)
-            if scale and scale >= 0.5 and scale <= 2.0 then
-                addon:SetSetting("profile.windowScale", scale)
-                addon:Print("Window scale set to: " .. scale)
-            else
-                addon:Print("Scale must be between 0.5 and 2.0")
-            end
-        else
-            -- Call original handler
-            oldHandler(msg)
-        end
-    end
-end
+-- Settings commands are now in TurtleCommands.lua
 
 -- Reset settings
 function addon:ResetSettings()
@@ -221,9 +195,6 @@ addon.Initialize = function(self)
     
     -- Initialize settings
     self:InitializeSettings()
-    
-    -- Register settings commands
-    self:RegisterSettingsCommands()
     
     self:Debug("Settings system initialized")
 end

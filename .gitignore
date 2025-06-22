@@ -1,3 +1,73 @@
+# VSCode
+/.vscode/settings.json
+
+# JetBrains IDEs (IntelliJ, etc.)
+.idea/
+*.iws
+*.iml
+*.ipr
+.idea_modules/
+atlassian-ide-plugin.xml
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Compiled files
+*.o
+*.os
+*.ko
+*.obj
+*.elf
+*.gch
+*.pch
+*.lib
+*.a
+*.la
+*.lo
+*.def
+*.exp
+*.dll
+*.so
+*.so.*
+*.dylib
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+luac.out
+
+# Archives
+*.src.rock
+*.zip
+*.tar.gz
+
+# Build directories
+cmake-build-*/
+out/
+
+# Project specific
+CLAUDE.md
+docs/
+TestTurtleWoW.lua
+
 #Ignore local import testing
 Guides/Import.lua
 .vscode/settings.json

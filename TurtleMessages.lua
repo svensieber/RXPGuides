@@ -33,16 +33,8 @@ function addon:UnregisterMessage(message, callback)
     end
 end
 
--- Send a message
-function addon:SendMessage(message)
-    -- Get arguments (everything after message)
-    local args = {}
-    if arg then
-        for i = 1, table.getn(arg) do
-            args[i] = arg[i]
-        end
-    end
-    
+-- Send a message (Lua 5.0 compatible)
+function addon:SendMessage(message, arg1, arg2, arg3, arg4, arg5)
     self:Debug("Sending message: " .. message)
     
     if not self.messageCallbacks[message] then return end
@@ -53,9 +45,9 @@ function addon:SendMessage(message)
         
         -- Call with addon as self and pass all arguments
         if type(callback) == "function" then
-            callback(self, message, unpack(args))
+            callback(self, message, arg1, arg2, arg3, arg4, arg5)
         elseif type(callback) == "string" and self[callback] then
-            self[callback](self, message, unpack(args))
+            self[callback](self, message, arg1, arg2, arg3, arg4, arg5)
         end
     end
 end
@@ -176,18 +168,4 @@ function addon:IsEnabled()
     return self.enabled
 end
 
--- Add enable/disable commands
-local oldHandler = SlashCmdList["RXPGUIDES"]
-SlashCmdList["RXPGUIDES"] = function(msg)
-    local cmd = addon:ParseCommand(msg)
-    
-    if cmd == "enable" then
-        addon:Enable()
-        addon:Print("Addon enabled")
-    elseif cmd == "disable" then
-        addon:Disable()
-        addon:Print("Addon disabled")
-    else
-        oldHandler(msg)
-    end
-end
+-- Enable/disable commands are now in TurtleCommands.lua

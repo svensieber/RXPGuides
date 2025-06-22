@@ -177,26 +177,7 @@ function addon:IncrementDeathCount()
     self:SendMessage("RXP_DEATH_COUNT_UPDATED", self.db.char.deathCount)
 end
 
--- Add database commands
-local oldHandler = SlashCmdList["RXPGUIDES"]
-SlashCmdList["RXPGUIDES"] = function(msg)
-    local cmd, arg = addon:ParseCommand(msg)
-    
-    if cmd == "resetdb" then
-        if arg and (arg == "global" or arg == "profile" or arg == "char" or arg == "all") then
-            addon:ResetDatabase(arg)
-        else
-            addon:Print("Usage: /rxp resetdb [global|profile|char|all]")
-        end
-    elseif cmd == "db" then
-        addon:Print("Database info:")
-        addon:Print("- Global entries: " .. addon:CountTableEntries(addon.db.global))
-        addon:Print("- Profile entries: " .. addon:CountTableEntries(addon.db.profile))
-        addon:Print("- Character entries: " .. addon:CountTableEntries(addon.db.char))
-    else
-        oldHandler(msg)
-    end
-end
+-- Database commands are now in TurtleCommands.lua
 
 -- Helper function to count table entries
 function addon:CountTableEntries(tbl)
