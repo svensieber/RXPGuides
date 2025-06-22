@@ -1,4 +1,5 @@
-local _, addon = ...
+-- In Lua 5.0 müssen wir die globale Variable nutzen
+local addon = _G["RXPGuides"] or {}
 
 -- Utility Funktionen für Turtle WoW / Lua 5.0
 

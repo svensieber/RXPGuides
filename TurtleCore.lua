@@ -1,4 +1,7 @@
-local addonName, addon = ...
+-- In Lua 5.0 müssen wir globale Variablen verwenden
+local addonName = "RXPGuides"
+local addon = {}
+_G[addonName] = addon
 
 -- Turtle WoW Core für RXPGuides
 -- Lua 5.0 kompatibel, WoW 1.12.1 API
@@ -21,15 +24,17 @@ addon.guides = {}
 _G.RXPGuides = addon
 
 -- Print function
-function addon:Print(msg, ...)
+function addon:Print(msg)
+    -- In Lua 5.0 nutzen wir arg für variable Argumente
     if arg and table.getn(arg) > 0 then
         msg = string.format(msg, unpack(arg))
     end
     DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99RXP|r: " .. msg)
 end
 
-function addon:Debug(msg, ...)
+function addon:Debug(msg)
     if not self.settings.debug then return end
+    -- In Lua 5.0 nutzen wir arg für variable Argumente
     if arg and table.getn(arg) > 0 then
         msg = string.format(msg, unpack(arg))
     end
