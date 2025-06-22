@@ -10,6 +10,15 @@ RXPGuides = addon
 -- Debug print to verify file is loading
 DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99RXP|r: TurtleCore.lua loading...")
 
+-- Error handler to catch issues
+local function SafeCall(func, ...)
+    local success, result = pcall(func, unpack(arg))
+    if not success then
+        DEFAULT_CHAT_FRAME:AddMessage("|cffff0000RXP Error:|r " .. (result or "unknown error"))
+    end
+    return success, result
+end
+
 -- Skip if main addon already loaded (shouldn't happen on Turtle)
 if addon.loaded then return end
 

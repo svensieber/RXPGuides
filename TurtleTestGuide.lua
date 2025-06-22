@@ -4,7 +4,18 @@ local addon = RXPGuides or {}
 -- Register test guide after addon loads
 local frame = CreateFrame("Frame")
 frame:RegisterEvent("PLAYER_LOGIN")
+frame:RegisterEvent("PLAYER_ENTERING_WORLD")
+local initialized = false
+
 frame:SetScript("OnEvent", function()
+    if initialized then return end
+    
+    -- Wait a bit to ensure all addons are loaded
+    if event == "PLAYER_LOGIN" then
+        return -- Wait for PLAYER_ENTERING_WORLD
+    end
+    
+    initialized = true
     -- Debug output
     DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99RXP|r: TurtleTestGuide.lua loading...")
     

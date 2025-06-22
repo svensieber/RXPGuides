@@ -10,6 +10,16 @@ function strtrim(str)
     return string.gsub(str, "^%s*(.-)%s*$", "%1")
 end
 
+-- Protect against Pawn compatibility issues
+if not string.match then
+    -- Safer implementation that handles nil
+    string.match = function(s, pattern)
+        if not s then return nil end
+        local _, _, capture = string.find(s, pattern)
+        return capture
+    end
+end
+
 -- Lua 5.0 hat kein table.wipe
 function addon.wipe(t)
     for k in pairs(t) do
