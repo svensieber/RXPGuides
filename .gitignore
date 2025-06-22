@@ -72,3 +72,5 @@ TestTurtleWoW.lua
 Guides/Import.lua
 .vscode/settings.json
 Scripts/*.csv
+PORTIERUNG_PLAN_TURTLE_WOW.md
+TURTLE_WOW_README.md
