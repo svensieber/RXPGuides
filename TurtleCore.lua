@@ -18,7 +18,9 @@ addon.gameVersion = 11200
 addon.version = "1.0.0-turtle"
 
 -- Basis Setup
-addon.settings = {}
+addon.settings = {
+    debug = false  -- Temporary until settings system initializes
+}
 addon.guides = {}
 
 -- Global reference already set above

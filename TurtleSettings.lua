@@ -84,11 +84,16 @@ end
 
 -- Get setting value
 function addon:GetSetting(path)
+    -- Ensure settings are properly initialized
+    if not self.settings or type(self.settings) ~= "table" then
+        self:InitializeSettings()
+    end
+    
     local current = self.settings
     local keys = self:SplitString(path, ".")
     
     for i = 1, table.getn(keys) do
-        if current[keys[i]] ~= nil then
+        if type(current) == "table" and current[keys[i]] ~= nil then
             current = current[keys[i]]
         else
             return nil
@@ -100,12 +105,17 @@ end
 
 -- Set setting value
 function addon:SetSetting(path, value)
+    -- Ensure settings are properly initialized
+    if not self.settings or type(self.settings) ~= "table" then
+        self:InitializeSettings()
+    end
+    
     local current = self.settings
     local keys = self:SplitString(path, ".")
     
     -- Navigate to the parent
     for i = 1, table.getn(keys) - 1 do
-        if not current[keys[i]] then
+        if type(current[keys[i]]) ~= "table" then
             current[keys[i]] = {}
         end
         current = current[keys[i]]
