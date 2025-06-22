@@ -16,23 +16,29 @@ frame:SetScript("OnEvent", function()
     end
     
     initialized = true
-    -- Debug output
-    DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99RXP|r: TurtleTestGuide.lua loading...")
     
-    -- Make sure we use the global RXPGuides
-    local addon = RXPGuides
-    if not addon then
-        DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99RXP|r: ERROR - RXPGuides global not found!")
-        return
-    end
-    
-    if not addon.RegisterGuide then
-        DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99RXP|r: ERROR - RegisterGuide not found!")
-        return
-    end
-    
-    DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99RXP|r: Registering test guides...")
-    DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99RXP|r: addon.guides exists: " .. tostring(addon.guides ~= nil))
+    -- Use a timer to ensure everything is loaded
+    local timerId
+    timerId = RXPGuides:ScheduleRepeatingTimer(function()
+        DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99RXP|r: Attempting to register test guides...")
+        
+        -- Make sure we use the global RXPGuides
+        local addon = RXPGuides
+        if not addon then
+            DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99RXP|r: ERROR - RXPGuides global not found!")
+            return
+        end
+        
+        if not addon.RegisterGuide then
+            DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99RXP|r: ERROR - RegisterGuide not found!")
+            return
+        end
+        
+        -- Cancel the timer since we can proceed
+        addon:CancelTimer(timerId)
+        
+        DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99RXP|r: RegisterGuide function found!")
+        DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99RXP|r: addon.guides exists: " .. tostring(addon.guides ~= nil))
     
     -- Human Starting Zone Test Guide
     addon:RegisterGuide([[
@@ -119,6 +125,7 @@ step
 .turnin 364 >> Turn in The Mindless Ones
 ]])
 
-    DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99RXP|r: Test guides registered successfully!")
-    addon:Print("Test guides loaded. Use /rxp guide to see them.")
+        DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99RXP|r: Test guides registered successfully!")
+        addon:Print("Test guides loaded. Use /rxp guide to see them.")
+    end, 1) -- Check every second
 end)
