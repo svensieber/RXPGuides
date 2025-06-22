@@ -11,10 +11,11 @@ function strtrim(str)
 end
 
 -- Protect against Pawn compatibility issues
-if not string.match then
-    -- Safer implementation that handles nil
+if not string.match or not pcall(string.match, "test", "test") then
+    -- Override with safer implementation that handles nil
     string.match = function(s, pattern)
         if not s then return nil end
+        if not pattern then return nil end
         local _, _, capture = string.find(s, pattern)
         return capture
     end

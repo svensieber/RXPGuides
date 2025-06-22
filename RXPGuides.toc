@@ -10,8 +10,8 @@
 ## X-Wago-ID: ZKbebq61
 
 # Turtle WoW Core Files
-TurtleCore.lua
 TurtleUtils.lua
+TurtleCore.lua
 TurtleMessages.lua
 TurtleSettings.lua
 TurtleDB.lua
