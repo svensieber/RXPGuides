@@ -265,7 +265,13 @@ function addon:RegisterGuide(guideString)
     end
     
     -- Store in database
+    if not self.guides then
+        self:Print("ERROR: self.guides is nil in RegisterGuide!")
+        self.guides = {}
+    end
+    
     self.guides[guide.key] = guide
+    self:Print("Guide stored with key: " .. guide.key)
     
     -- Group organization
     if not self.guideGroups then
@@ -279,7 +285,7 @@ function addon:RegisterGuide(guideString)
     
     tinsert(self.guideGroups[group], guide.key)
     
-    self:Debug("Registered guide: " .. guide.name)
+    self:Print("Successfully registered guide: " .. guide.name)
     self:SendMessage("RXP_GUIDE_REGISTERED", guide.key)
     
     return guide

@@ -122,9 +122,16 @@ function addon:SetupAllCommands()
         
         -- Debug: Check if guides table exists
         if not self.guides then
-            self:Print("ERROR: self.guides is nil!")
+            self:Print("ERROR: self.guides is nil in test3!")
             self.guides = {}
+        else
+            self:Print("self.guides exists")
         end
+        
+        -- Also check addon.guides vs self.guides
+        self:Print("addon.guides == self.guides: " .. tostring(addon.guides == self.guides))
+        self:Print("Type of self: " .. type(self))
+        self:Print("Type of addon: " .. type(addon))
         
         -- Test guide registration
         local testGuideCount = 0
@@ -133,6 +140,13 @@ function addon:SetupAllCommands()
             self:Print("Found guide: " .. guide.name .. " (" .. key .. ")")
         end
         self:Print("Total guides registered: " .. testGuideCount)
+        
+        -- Also check addon.guides directly
+        local addonGuideCount = 0
+        for key, guide in pairs(addon.guides) do
+            addonGuideCount = addonGuideCount + 1
+        end
+        self:Print("Total in addon.guides: " .. addonGuideCount)
         
         -- Test guide parsing
         local simpleGuide = [[

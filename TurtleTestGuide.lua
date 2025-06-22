@@ -8,12 +8,20 @@ frame:SetScript("OnEvent", function()
     -- Debug output
     DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99RXP|r: TurtleTestGuide.lua loading...")
     
+    -- Make sure we use the global RXPGuides
+    local addon = RXPGuides
+    if not addon then
+        DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99RXP|r: ERROR - RXPGuides global not found!")
+        return
+    end
+    
     if not addon.RegisterGuide then
         DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99RXP|r: ERROR - RegisterGuide not found!")
         return
     end
     
     DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99RXP|r: Registering test guides...")
+    DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99RXP|r: addon.guides exists: " .. tostring(addon.guides ~= nil))
     
     -- Human Starting Zone Test Guide
     addon:RegisterGuide([[
